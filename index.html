@@ -4,239 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Special Surprise For You 💖</title>
-    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Sacramento&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #feada6 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow-x: hidden; position: relative; padding: 20px; }
+        .heart-bg { position: absolute; top: -10vh; font-size: 20px; animation: fall 5s linear infinite; z-index: 0; user-select: none; }
+        @keyframes fall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(105vh) rotate(360deg); opacity: 0; } }
+        .glass-card { background: rgba(255, 255, 255, 0.25); box-shadow: 0 8px 32px 0 rgba(255, 105, 180, 0.37); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.4); width: 100%; max-width: 450px; padding: 25px; text-align: center; color: #4a4a4a; position: relative; z-index: 10; transition: all 0.5s ease-in-out; }
+        .page { display: none; opacity: 0; transition: opacity 0.5s ease-in-out; }
+        .page.active { display: block; opacity: 1; }
+        h1, h2 { color: #d63384; margin-bottom: 15px; }
+        .cursive { font-family: 'Sacramento', cursive; font-size: 2.5rem; }
+        p { font-size: 0.95rem; margin-bottom: 20px; color: #6c757d; }
+        
+        /* Fixed Button Layout */
+        .btn-group { display: flex; justify-content: center; gap: 20px; margin-top: 20px; align-items: center; position: relative; }
+        .btn { background: linear-gradient(45deg, #ff6b6b, #ff8e8e); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4); transition: transform 0.2s, background 0.3s; }
+        .btn:hover { transform: scale(1.05); }
+        .btn-no { background: linear-gradient(45deg, #6c757d, #adb5bd); }
 
-        body {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #feada6 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
-            position: relative;
-            padding: 20px;
-        }
-
-        /* Floating Hearts Background */
-        .heart-bg {
+        /* Pop-up message styling for No button */
+        #dustuPopup {
             position: absolute;
-            top: -10vh;
-            font-size: 20px;
-            animation: fall 5s linear infinite;
-            z-index: 0;
-            user-select: none;
-        }
-
-        @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* Glassmorphism Card Container */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 8px 32px 0 rgba(255, 105, 180, 0.37);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            width: 100%;
-            max-width: 450px;
-            padding: 25px;
-            text-align: center;
-            color: #4a4a4a;
-            position: relative;
-            z-index: 10;
-            transition: all 0.5s ease-in-out;
-        }
-
-        .page {
+            top: -40px;
+            background: #ff4757;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+            animation: fadeInOut 1.5s ease;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(10px); }
+            20% { opacity: 1; transform: translateY(0); }
+            80% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-10px); }
         }
 
-        .page.active {
-            display: block;
-            opacity: 1;
-        }
-
-        h1, h2 {
-            color: #d63384;
-            margin-bottom: 15px;
-        }
-
-        .cursive {
-            font-family: 'Sacramento', cursive;
-            font-size: 2.5rem;
-        }
-
-        p {
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-            color: #6c757d;
-        }
-
-        /* Buttons */
-        .btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-            position: relative;
-            min-height: 50px;
-        }
-
-        .btn {
-            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-            transition: transform 0.2s, background 0.3s;
-        }
-
-        .btn:hover {
-            transform: scale(1.05);
-        }
-
-        .btn-no {
-            background: linear-gradient(45deg, #6c757d, #adb5bd);
-            position: absolute;
-        }
-
-        /* Calendar */
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-            margin-top: 10px;
-            background: rgba(255, 255, 255, 0.4);
-            padding: 10px;
-            border-radius: 12px;
-        }
-
-        .calendar-header {
-            font-weight: bold;
-            font-size: 0.8rem;
-            color: #d63384;
-        }
-
-        .day {
-            padding: 8px 0;
-            font-size: 0.85rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .day:not(.empty):hover {
-            background: rgba(255, 105, 180, 0.3);
-        }
-
-        .day.selected {
-            background: #ff4757 !important;
-            color: white;
-            font-weight: bold;
-        }
-
-        /* Cards Selection (Time & Activity) */
-        .selection-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
-            max-height: 250px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .select-card {
-            background: rgba(255, 255, 255, 0.5);
-            border: 1.5px solid transparent;
-            padding: 12px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .select-card:hover {
-            border-color: #ff6b6b;
-        }
-
-        .select-card.selected {
-            background: #ffe3e3;
-            border-color: #ff4757;
-            color: #ff4757;
-            font-weight: 600;
-        }
-
-        /* Music Controls */
-        .music-btn {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            padding: 8px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        /* Cute Bear GIF */
-        .bear-gif {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 10px;
-        }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px; background: rgba(255, 255, 255, 0.4); padding: 10px; border-radius: 12px; }
+        .calendar-header { font-weight: bold; font-size: 0.8rem; color: #d63384; }
+        .day { padding: 8px 0; font-size: 0.85rem; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .day:not(.empty):hover { background: rgba(255, 105, 180, 0.3); }
+        .day.selected { background: #ff4757 !important; color: white; font-weight: bold; }
+        .selection-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; max-height: 250px; overflow-y: auto; padding-right: 5px; }
+        .select-card { background: rgba(255, 255, 255, 0.5); border: 1.5px solid transparent; padding: 12px; border-radius: 12px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .select-card:hover { border-color: #ff6b6b; }
+        .select-card.selected { background: #ffe3e3; border-color: #ff4757; color: #ff4757; font-weight: 600; }
+        .music-btn { position: fixed; top: 15px; right: 15px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.6); padding: 8px 12px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; z-index: 100; display: flex; align-items: center; gap: 5px; }
+        .bear-gif { width: 120px; height: 120px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
-
-    <!-- Music Player -->
     <button class="music-btn" id="musicToggle">🎵 Play Music</button>
     <audio id="bgMusic" loop>
         <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
     </audio>
 
     <div class="glass-card">
-        
-        <!-- Page 1: Question -->
         <div class="page active" id="page1">
             <img src="https://media.tenor.com/gU81mA933wsAAAAi/bear-cute.gif" class="bear-gif" alt="Cute Bear">
             <h1 class="cursive">Hey Beautiful...</h1>
             <p>I was wondering, will you go out on a date with me? 🌹</p>
-            <div class="btn-group">
+            <div class="btn-group" style="position: relative;">
+                <div id="dustuPopup">You dustu! 🤭</div>
                 <button class="btn" onclick="nextPage(2)">Yes! 💖</button>
-                <button class="btn btn-no" id="noBtn" onmouseover="moveNoButton()" onclick="moveNoButton()">No 😜</button>
+                <button class="btn btn-no" onclick="showDustu()">No 😜</button>
             </div>
         </div>
 
-        <!-- Page 2: Select Date (August 2026) -->
         <div class="page" id="page2">
             <h2>August 2026 📅</h2>
             <p>Pick a day when you're free!</p>
@@ -254,34 +93,20 @@
             </div>
         </div>
 
-        <!-- Page 3: Select Time -->
         <div class="page" id="page3">
             <h2>Select Time 🕒</h2>
             <p>What time suits you best?</p>
             <div class="selection-grid">
-                <div class="select-card" onclick="selectCard(this, 'time')">
-                    🌅 Morning
-                    <small>6:00 AM - 11:00 AM</small>
-                </div>
-                <div class="select-card" onclick="selectCard(this, 'time')">
-                    ☀️ Afternoon
-                    <small>1:00 PM - 3:00 PM</small>
-                </div>
-                <div class="select-card" onclick="selectCard(this, 'time')">
-                    🌆 Evening
-                    <small>5:00 PM - 7:00 PM</small>
-                </div>
-                <div class="select-card" onclick="selectCard(this, 'time')">
-                    🌙 Night
-                    <small>8:00 PM - 11:00 PM</small>
-                </div>
+                <div class="select-card" onclick="selectCard(this, 'time')">🌅 Morning <small>6:00 AM - 11:00 AM</small></div>
+                <div class="select-card" onclick="selectCard(this, 'time')|">☀️ Afternoon <small>1:00 PM - 3:00 PM</small></div>
+                <div class="select-card" onclick="selectCard(this, 'time')">🌆 Evening <small>5:00 PM - 7:00 PM</small></div>
+                <div class="select-card" onclick="selectCard(this, 'time')">🌙 Night <small>8:00 PM - 11:00 PM</small></div>
             </div>
             <div class="btn-group">
                 <button class="btn" onclick="validatePage3()">Next ✨</button>
             </div>
         </div>
 
-        <!-- Page 4: Select Activities -->
         <div class="page" id="page4">
             <h2>What should we do? 🎈</h2>
             <p>Choose as many as you like!</p>
@@ -300,18 +125,15 @@
             </div>
         </div>
 
-        <!-- Page 5: Celebration -->
         <div class="page" id="page5">
             <img src="https://media.tenor.com/eb43R3293_gAAAAi/hug-kiss.gif" class="bear-gif" alt="Celebration Bear">
             <h1 class="cursive">Yaaay! Can't Wait! 🎉</h1>
             <p>Our date is officially set! See you soon, my love 💖</p>
             <div id="summary" style="font-size: 0.85rem; text-align: left; background: rgba(255,255,255,0.4); padding: 12px; border-radius: 10px;"></div>
         </div>
-
     </div>
 
     <script>
-        // Floating Hearts Background
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart-bg');
@@ -323,28 +145,22 @@
         }
         setInterval(createHeart, 300);
 
-        // Music Player Logic
         const music = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicToggle');
         musicBtn.addEventListener('click', () => {
-            if (music.paused) {
-                music.play();
-                musicBtn.innerHTML = '⏸️ Pause';
-            } else {
-                music.pause();
-                musicBtn.innerHTML = '🎵 Play Music';
-            }
+            if (music.paused) { music.play(); musicBtn.innerHTML = '⏸️ Pause'; }
+            else { music.pause(); musicBtn.innerHTML = '🎵 Play Music'; }
         });
 
-        // Escaping No Button
-        function moveNoButton() {
-            const btn = document.getElementById('noBtn');
-            const x = Math.random() * (window.innerWidth - 100) - (window.innerWidth / 2 - 50);
-            const y = Math.random() * (window.innerHeight - 100) - (window.innerHeight / 2 - 50);
-            btn.style.transform = `translate(${x}px, ${y}px)`;
+        // Show Dustu Popup Function
+        function showDustu() {
+            const popup = document.getElementById('dustuPopup');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 1500);
         }
 
-        // Page Navigation
         let currentPage = 1;
         function nextPage(pageNumber) {
             document.getElementById(`page${currentPage}`).classList.remove('active');
@@ -352,17 +168,13 @@
             document.getElementById(`page${currentPage}`).classList.add('active');
         }
 
-        // Calendar Generation (August 2026)
-        // Aug 1, 2026 is Saturday (Day index 6)
         const calendar = document.getElementById('calendar');
         let selectedDate = null;
-
         for (let i = 0; i < 6; i++) {
             const emptyCell = document.createElement('div');
             emptyCell.classList.add('day', 'empty');
             calendar.appendChild(emptyCell);
         }
-
         for (let day = 1; day <= 31; day++) {
             const dayCell = document.createElement('div');
             dayCell.classList.add('day');
@@ -376,14 +188,10 @@
         }
 
         function validatePage2() {
-            if (!selectedDate) {
-                alert('Please pick a date first! 📅');
-                return;
-            }
+            if (!selectedDate) { alert('Please pick a date first! 📅'); return; }
             nextPage(3);
         }
 
-        // Time Selection Logic
         let selectedTime = null;
         function selectCard(card, type) {
             document.querySelectorAll('#page3 .select-card').forEach(c => c.classList.remove('selected'));
@@ -392,14 +200,10 @@
         }
 
         function validatePage3() {
-            if (!selectedTime) {
-                alert('Please choose a time! 🕒');
-                return;
-            }
+            if (!selectedTime) { alert('Please choose a time! 🕒'); return; }
             nextPage(4);
         }
 
-        // Activity Multi-Selection Logic
         let selectedActivities = [];
         function toggleMultiCard(card) {
             card.classList.toggle('selected');
@@ -412,29 +216,12 @@
         }
 
         function finishSelection() {
-            if (selectedActivities.length === 0) {
-                alert('Select at least one activity! 🎈');
-                return;
-            }
-            
-            // Show Summary
+            if (selectedActivities.length === 0) { alert('Select at least one activity! 🎈'); return; }
             const summary = document.getElementById('summary');
-            summary.innerHTML = `
-                <strong>📅 Date:</strong> ${selectedDate}<br>
-                <strong>🕒 Time:</strong> ${selectedTime}<br>
-                <strong>🎈 Activities:</strong> ${selectedActivities.join(', ')}
-            `;
-
+            summary.innerHTML = `<strong>📅 Date:</strong> ${selectedDate}<br><strong>🕒 Time:</strong> ${selectedTime}<br><strong>🎈 Activities:</strong> ${selectedActivities.join(', ')}`;
             nextPage(5);
-
-            // Confetti Celebration
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         }
     </script>
 </body>
 </html>
-
